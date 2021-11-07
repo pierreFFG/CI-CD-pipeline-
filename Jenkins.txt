@@ -58,20 +58,26 @@ pw = admin
 
 III-/ NEXUS: ssh into EC2
 
-sudo yum update -y
-sudo yum install wget -y
-sudo yum install java-1.8.0-openjdk.x86_64 -y
-sudo mkdir /app && cd /app
-sudo wget -O nexus.tar.gz https://download.sonatype.com/nexus/3/latest-unix.tar.gz
-sudo tar -xvf nexus.tar.gz
+A*** Set up the Nexus Instance
+
+* sudo yum update -y
+* sudo yum install wget -y
+* sudo yum install java-1.8.0-openjdk.x86_64 -y
+* sudo mkdir /app && cd /app
+* sudo wget -O nexus.tar.gz https://download.sonatype.com/nexus/3/latest-unix.tar.gz
+* sudo tar -xvf nexus.tar.gz
+
 ls and edit the file accordingly
-sudo mv nexus-3.34.1-01/ nexus
-sudo adduser nexus
-sudo chown -R nexus:nexus /app/nexus
-sudo chown -R nexus:nexus /app/sonatype-work
-sudo vi /app/nexus/bin/nexus.rc
-run_as_user="nexus"
-sudo vi /etc/systemd/system/nexus.service
+
+* sudo mv nexus-3.34.1-01/ nexus
+* sudo adduser nexus
+* sudo chown -R nexus:nexus /app/nexus
+* sudo chown -R nexus:nexus /app/sonatype-work
+* sudo vi /app/nexus/bin/nexus.rc
+* uncomment #run_as_user
+* add run_as_user="nexus"
+* sudo vi /etc/systemd/system/nexus.service
+copy and paste the below text
 
 [Unit]
 Description=nexus service
@@ -90,15 +96,28 @@ Restart=on-abort
 [Install]
 WantedBy=multi-user.target
 
-sudo chkconfig nexus on
-sudo systemctl start nexus
+* sudo chkconfig nexus on
+* sudo systemctl start nexus
 
 
-go to web publicip 54.186.109.176:8081 username=admin   pw=admin 
+go to web publicip 54.186.109.176:8081
 
-Configure Jenkins with Nexus
+* username=admin 
+* sudo cat dcf13145-d9e0-4049-b8b1-99597b0de62e (to get the password)
+* pw=admin 
+* Click on Next
+* Check "Enable anonymous access"
+* Click on Finish
+* Click on Settings
+* Repositories/Create Repositories
+* Select Maven 2 (group)
+* select the member repositories one by one and move them to the right
+* Create the repositories
 
-install maven
+
+B*** Configure Jenkins with Nexus
+
+1-) install maven
 
 https://docs.aws.amazon.com/neptune/latest/userguide/iam-auth-connect-prerq.html
 mvn -emp admin
@@ -169,7 +188,7 @@ vi hosts
 
 
 
-set-up Dev & Prod
+2-) Set-up Dev & Prod
 
 ssh into Dev & Prod EC2
 sudo su
