@@ -1,0 +1,170 @@
+I- JENKINS
+
+#!/bin/bash
+cd /home/ec2-user
+sudo yum install java-1.8* -y
+sudo yum install wget –y
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+sudo amazon-linux-extras install epel -y 
+sudo yum update -y 
+sudo yum install jenkins java-1.8.0-openjdk-devel
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+sudo systemctl status jenkins
+
+go to web, copy public ip of EC2     http://public-ip 34.213.127.1:8080
+
+http://34.213.127.1:8080/github-webhook/    to do payurl on GITHub Webhook
+
+
+PW= '8b324d299d824908aefaf003a72985f7'
+
+create an account.
+
+Go to manage Jenkins, manage plugings on Jenkins.... install without restart.
+
+-Sonarqube
+-Maven integration. Pipeline Maven Integration. Maven release plugin.
+
+Go back to manage Jenkins. Global Tool Configuration.
+add JDK enter localJdk on name. add SonarQube and add localMaven.
+
+
+SONARQUBE EC2:
+
+ssh into EC2
+sudo yum install java-1.8.0 -y
+sudo wget -O /etc/yum.repos.d/sonar.repo http://downloads.sourceforge.net/project/sonar-pkg/rpm/sonar.repo
+sudo yum install sonar -y
+sudo service sonar start
+sudo service sonar status
+go to web browser and paste EC2 publicIP 34.215.3.168:9000   username=admin   pw=admin
+
+
+NEXUS: ssh into EC2
+
+sudo yum update -y
+sudo yum install wget -y
+sudo yum install java-1.8.0-openjdk.x86_64 -y
+sudo mkdir /app && cd /app
+sudo wget -O nexus.tar.gz https://download.sonatype.com/nexus/3/latest-unix.tar.gz
+sudo tar -xvf nexus.tar.gz
+ls and edit the file accordingly
+sudo mv nexus-3.34.1-01/ nexus
+sudo adduser nexus
+sudo chown -R nexus:nexus /app/nexus
+sudo chown -R nexus:nexus /app/sonatype-work
+sudo vi /app/nexus/bin/nexus.rc
+run_as_user="nexus"
+sudo vi /etc/systemd/system/nexus.service
+
+[Unit]
+Description=nexus service
+After=network.target
+
+[Service]
+Type=forking
+LimitNOFILE=65536
+User=nexus
+Group=nexus
+ExecStart=/app/nexus/bin/nexus start
+ExecStop=/app/nexus/bin/nexus stop
+User=nexus
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
+
+sudo chkconfig nexus on
+sudo systemctl start nexus
+
+
+go to web publicip 54.186.109.176:8081 username=admin   pw=admin 
+
+Configure Jenkins with Nexus
+
+install maven
+
+https://docs.aws.amazon.com/neptune/latest/userguide/iam-auth-connect-prerq.html
+mvn -emp admin
+
+<?xml version="1.0"?>
+<settingsSecurity>
+    <master>{wxkxTpTJ3zEHswbAySj3Fz5NOuNMTNEfQDDL54O7LtM=}</master>
+</settingsSecurity>
+
+sudo su
+cd /root/
+mkdir .m2
+cd .m2
+mvn -emp admin
+
+* vi settings-security.xml
+
+mvn-ep admin
+{KFeb46C0C00HXjksaYBQSLOQ7DBB+1j8908BYRMi+ZI=}
+
+* vi settings.xml (paste d below)
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/POM/4.0.0"
+		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <localRepository>/var/lib/jenkins/.m2/repository</localRepository>
+
+<servers>
+   <server>
+        <id>nexus</id>
+        <username>admin</username>
+        <password>{+83SyVWa4nsH+UHHcfntvmJIjN0BuEDmh3fE5JCfra8=}</password>
+    </server>
+</servers>
+
+<mirrors>
+    <mirror>
+      <id>nexus</id>
+      <name>nexus</name>
+		<url>http://54.186.109.176:8081/repository/maven_project/</url>
+      <mirrorOf>*</mirrorOf>
+    </mirror>
+  </mirrors>
+</settings>
+
+mv settings.xml settings-security.xml /var/lib/jenkins/.m2
+cd /var/lib/jenkins/.m2
+chown jenkins:jenkins settings.xml settings-security.xml
+chmod 755 settings.xml settings-security.xml
+
+set-up Ansible in Jenkins EC2
+sudo amazon-linux-extras install ansible2
+sudo su
+cd /root
+useradd ansadmin
+passwd ansadmin
+cd /etc/ansible/
+vi ansible.cfg (uncomment host_key_checking = False)
+vi hosts
+
+[dev]
+35.165.82.121 ansible_user=ansadmin ansible_password=ansadmin
+[prod]
+34.212.63.167 ansible_user=ansadmin ansible_password=ansadmin
+
+
+
+set-up Dev & Prod
+
+ssh into Dev & Prod EC2
+sudo su
+useradd ansadmin
+passwd ansadmin
+vi /etc/ssh/sshd_config (uncomment PasswordAuthentication yes and uncomment PasswordAuthentication no)
+service sshd restart
+visudo
+usermod -aG wheel ansadmin
+sudo amazon-linux-extras install tomcat8.5 -y
+sudo systemctl start tomcat
+sudo systemctl status tomcat
