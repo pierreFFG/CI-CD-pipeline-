@@ -20,28 +20,40 @@ http://34.213.127.1:8080/github-webhook/    (to connect your Jenkins instance to
 sudo cat the link to obtain the Jenkins password
 PW= '8b324d299d824908aefaf003a72985f7'
 
-create a Jenkins account.
+Install the suggested plugins and the create first admin user
 
 Go to manage Jenkins 
-manage plugings on Jenkins.... 
-install without restart.
+manage plugings on Jenkins....
+click on "available"
 
-Sonarqube
--Maven integration. Pipeline Maven Integration. Maven release plugin.
+* Sonarqube
+* Maven integration 
+* Pipeline Maven Integration 
+* Maven release plugin.
 
-Go back to manage Jenkins. Global Tool Configuration.
-add JDK enter localJdk on name. add SonarQube and add localMaven.
+"install them without restart."
+
+Go back to manage Jenkins. 
+
+* Click on Global Tool Configuration.
+* add JDK enter localJdk on name 
+* add SonarQube enter SonarQube
+* add maven installations enter localMaven.
 
 
 II-/ SONARQUBE EC2:
 
 ssh into SonarQube instance
-sudo yum install java-1.8.0 -y
-sudo wget -O /etc/yum.repos.d/sonar.repo http://downloads.sourceforge.net/project/sonar-pkg/rpm/sonar.repo
-sudo yum install sonar -y
-sudo service sonar start
-sudo service sonar status
-go to web browser and paste EC2 publicIP 34.215.3.168:9000   username=admin   pw=admin
+
+* sudo yum install java-1.8.0 -y
+* sudo wget -O /etc/yum.repos.d/sonar.repo http://downloads.sourceforge.net/project/sonar-pkg/rpm/sonar.repo
+* sudo yum install sonar -y
+* sudo service sonar start
+* sudo service sonar status
+
+go to web browser and paste EC2 publicIP 34.215.3.168:9000   
+username = admin   
+pw = admin
 
 
 III-/ NEXUS: ssh into EC2
