@@ -13,9 +13,9 @@ sudo systemctl start jenkins
 sudo systemctl enable jenkins
 sudo systemctl status jenkins
 
-go to web, copy public ip of EC2     http://public-ip 34.213.127.1:8080
+go to web, copy public ip of EC2     http://public-ip 34.221.177.100:8080
 
-http://34.213.127.1:8080/github-webhook/    (to connect your Jenkins instance to your GITHub Webhook so that when your start a job by pushing a code on Github, Github Webhook will directly trigger the Jenkins Inctance) 
+http://34.221.177.100:8080/github-webhook/    (to connect your Jenkins instance to your GITHub Webhook so that when your start a job by pushing a code on Github, Github Webhook will directly trigger the Jenkins Inctance) 
 
 sudo cat the link to obtain the Jenkins password
 PW= '8b324d299d824908aefaf003a72985f7'
@@ -51,7 +51,7 @@ ssh into SonarQube instance
 * sudo service sonar start
 * sudo service sonar status
 
-go to web browser and paste EC2 publicIP 34.215.3.168:9000   
+go to web browser and paste EC2 publicIP 52.34.19.81:9000   
 username = admin   
 pw = admin
 
@@ -100,7 +100,7 @@ WantedBy=multi-user.target
 * sudo systemctl start nexus
 
 
-go to web publicip 54.186.109.176:8081
+go to web publicip 54.200.242.145:8081
 
 * username=admin 
 * sudo cat dcf13145-d9e0-4049-b8b1-99597b0de62e (to get the password)
@@ -160,7 +160,7 @@ mvn-ep admin
     <mirror>
       <id>nexus</id>
       <name>nexus</name>
-		<url>http://54.186.109.176:8081/repository/maven_project/</url>
+		<url>http://54.200.242.145:8081/repository/maven_project/</url>
       <mirrorOf>*</mirrorOf>
     </mirror>
   </mirrors>
@@ -182,9 +182,9 @@ vi ansible.cfg (uncomment host_key_checking = False)
 vi hosts
 
 [dev]
-35.165.82.121 ansible_user=ansadmin ansible_password=ansadmin
+34.219.67.2 ansible_user=ansadmin ansible_password=ansadmin
 [prod]
-34.212.63.167 ansible_user=ansadmin ansible_password=ansadmin
+54.190.43.189 ansible_user=ansadmin ansible_password=ansadmin
 
 
 
