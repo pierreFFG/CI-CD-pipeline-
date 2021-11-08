@@ -114,8 +114,10 @@ go to web publicip 54.200.242.145:8081
 * select the member repositories one by one and move them to the right
 * Create the repositories
 
+AFTER, WE WILL TRY TO PUSH THE APPLICATION CODE TO OUR GITHUB BY CREATING A REPOSITORY AND CLONE IT INTO OUR LOCAL MACHINE SO THAT WE COULD PUSH THE APPLICATION CODE IN.
 
-B*** Configure Jenkins with Nexus
+
+	B*** Configure Jenkins with Nexus
 
 1-) install maven
 
