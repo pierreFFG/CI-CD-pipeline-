@@ -15,10 +15,10 @@ sudo systemctl status jenkins
 
 go to web, copy public ip of EC2     http://public-ip 34.221.214.164:8080
 
-http://34.221.214.164/github-webhook/    (to connect your Jenkins instance to your GITHub Webhook so that when your start a job by pushing a code on Github, Github Webhook will directly trigger the Jenkins Inctance) 
+http://34.221.214.164:8080/github-webhook/    (to connect your Jenkins instance to your GITHub Webhook so that when your start a job by pushing a code on Github, Github Webhook will directly trigger the Jenkins Inctance) 
 
 sudo cat the link to obtain the Jenkins password
-PW= '8b324d299d824908aefaf003a72985f7'
+PW= 'dad3e3d6362b4d8baf8d2a3626cf8227'
 
 Install the suggested plugins and the create first admin user
 
@@ -69,7 +69,7 @@ III-/ NEXUS: ssh into EC2
 
 ls and edit the file accordingly
 
-* sudo mv nexus-3.34.1-01/ nexus
+* sudo mv nexus-3.36.0-01/ nexus
 * sudo adduser nexus
 * sudo chown -R nexus:nexus /app/nexus
 * sudo chown -R nexus:nexus /app/sonatype-work
@@ -103,7 +103,7 @@ WantedBy=multi-user.target
 go to web publicip 34.219.54.200:8081
 
 * username=admin 
-* sudo cat dcf13145-d9e0-4049-b8b1-99597b0de62e (to get the password)
+* sudo cat c4546782-117d-4fc0-a65d-1fc4f8fa7383 (to get the password)
 * pw=admin 
 * Click on Next
 * Check "Enable anonymous access"
