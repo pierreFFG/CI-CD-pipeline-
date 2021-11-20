@@ -28,7 +28,7 @@ click on "available"
 
 * Sonarqube
 * Maven integration 
-* Pipeline Maven Integration 
+* Pipeline Maven Integration
 * Maven release plugin.
 
 "install them without restart."
